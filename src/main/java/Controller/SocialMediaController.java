@@ -1,12 +1,15 @@
 package Controller;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import Model.Account;
+import Model.Message;
 import Service.AccountService;
+import Service.MessageService;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -22,9 +25,11 @@ public class SocialMediaController {
      * @return a Javalin app object which defines the behavior of the Javalin controller.
      */
     private AccountService accountService;
+    private MessageService messageService;
 
     public SocialMediaController(){
         this.accountService=new AccountService();
+        this.messageService=new MessageService();
     }
 
     public Javalin startAPI() {
@@ -32,6 +37,9 @@ public class SocialMediaController {
         app.get("example-endpoint", this::exampleHandler);
         app.post("/register", this::userRegistrationHandler);
         app.post("/login",this::userLoginHandler);
+        app.get("/messages",this::retrievingAllMessagesHandler);
+        app.post("/messages",this::creatingMessageHandler);
+        
 
         return app;
     }
@@ -66,6 +74,25 @@ public class SocialMediaController {
             ctx.status(200);
         }else{
             ctx.status(401);
+        }
+    }
+    //Handler method to retreive all messages into database
+    public void retrievingAllMessagesHandler(Context ctx) throws JsonProcessingException, SQLException{
+        ObjectMapper mapper=new ObjectMapper();
+        List<Message> messageList=messageService.getAllMessages();
+        ctx.json(mapper.writeValueAsString(messageList));
+        ctx.status(200);
+    }
+    //Handler method to create message 
+    public void creatingMessageHandler(Context ctx) throws JsonProcessingException, SQLException{
+        ObjectMapper mapper=new ObjectMapper();
+        Message messageRequest=mapper.readValue(ctx.body(), Message.class);
+        Message messageCreated=messageService.creatingMessage(messageRequest);
+        if(messageCreated!=null){
+            ctx.json(mapper.writeValueAsString(messageCreated));
+            ctx.status(200);
+        }else{
+            ctx.status(400);
         }
     }
 

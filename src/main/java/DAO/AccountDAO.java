@@ -73,4 +73,24 @@ public class AccountDAO {
         return null;
     }
 
+       //Retrieve the user account by Given account id
+       public Account getAccountById(int accountId) throws SQLException{
+        Connection connection=ConnectionUtil.getConnection();
+        Account accountRetrieve;
+        //SQL statement to retrieve account from database after check the given account
+        String sqlStatement="SELECT * FROM account WHERE account_id=?";
+        PreparedStatement preparedStatement=connection.prepareStatement(sqlStatement);
+
+        //initialize prepareStatement parameters
+        preparedStatement.setInt(1, accountId);
+
+        ResultSet results=preparedStatement.executeQuery();
+        if (results.next()) {
+            accountRetrieve=new Account(results.getInt("account_id"), results.getString("username"), results.getString("password"));
+            return accountRetrieve;
+        }
+
+        return null;
+    }
+
 }
