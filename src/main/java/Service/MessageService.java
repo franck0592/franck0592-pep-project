@@ -48,9 +48,9 @@ public class MessageService {
         }
     }
 
-    //@Return message update after checking some constraints
+    //@Return message updated after checking some constraints
     public Message updateMessageByMessageId(Message messageToUpdate) throws SQLException{
-        //checking whether the message exists 
+        //checking whether the message exists or not
         Message messageRetrieved=messageDAO.getMessageById(messageToUpdate.getMessage_id());
         if(messageRetrieved==null){
             return null;
@@ -63,6 +63,19 @@ public class MessageService {
             }
         }
        
+        return null;
+    }
+
+    public Message deleteMessageByMessageId(int message_id) throws SQLException{
+        Message messageRetreivedForDeletion=messageDAO.getMessageById(message_id);
+        if(messageRetreivedForDeletion!=null){
+            int rowAffected=messageDAO.deleteMessage(message_id);
+            if(rowAffected>0){
+                return messageRetreivedForDeletion;
+            }else{
+                return null;
+            }
+        }
         return null;
     }
     

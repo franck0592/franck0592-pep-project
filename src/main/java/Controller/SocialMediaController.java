@@ -1,5 +1,7 @@
 package Controller;
 
+import static org.mockito.ArgumentMatchers.matches;
+
 import java.sql.SQLException;
 import java.util.List;
 
@@ -41,6 +43,7 @@ public class SocialMediaController {
         app.post("/messages",this::creatingMessageHandler);
         app.get("/messages/{message_id}",this::retrievingMessageByMessageIdHandler);
         app.patch("/messages/{message_id}",this::updatingMessageByMessageIdHandler);
+        app.delete("/messages/{message_id}", this::deletingMessageByMessageIdHandler);
         
 
         return app;
@@ -122,6 +125,19 @@ public class SocialMediaController {
             ctx.status(200);
         }else{
             ctx.status(400);
+        }
+    }
+
+    //Handler method for deletion of the message by given message id
+    public void deletingMessageByMessageIdHandler(Context ctx) throws JsonProcessingException, SQLException{
+        ObjectMapper mapper=new ObjectMapper();
+        int messageId=Integer.parseInt(ctx.pathParam("message_id"));
+        Message messageDeleted=messageService.deleteMessageByMessageId(messageId);
+        if(messageDeleted!=null){
+            ctx.json(mapper.writeValueAsString(messageDeleted));
+            ctx.status(200);
+        }else{
+            ctx.status(200);
         }
     }
 

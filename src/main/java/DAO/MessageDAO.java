@@ -65,6 +65,7 @@ public class MessageDAO {
     public int deleteMessage(int messageId) throws SQLException{
         String sqlStatement="DELETE FROM message WHERE message_id=?";
         PreparedStatement preparedStatement=connection.prepareStatement(sqlStatement);
+        preparedStatement.setInt(1, messageId);
         int rowAffected=preparedStatement.executeUpdate();
         if(rowAffected>0){
             return rowAffected;
