@@ -1,5 +1,6 @@
 package Controller;
 
+import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.matches;
 
 import java.sql.SQLException;
@@ -44,8 +45,8 @@ public class SocialMediaController {
         app.get("/messages/{message_id}",this::retrievingMessageByMessageIdHandler);
         app.patch("/messages/{message_id}",this::updatingMessageByMessageIdHandler);
         app.delete("/messages/{message_id}", this::deletingMessageByMessageIdHandler);
+        app.get("/accounts/{account_id}/messages",this::getAllMessagesByAccountIdHandler);
         
-
         return app;
     }
 
@@ -137,6 +138,19 @@ public class SocialMediaController {
             ctx.json(mapper.writeValueAsString(messageDeleted));
             ctx.status(200);
         }else{
+            ctx.status(200);
+        }
+    }
+    //Handler method to retreive all messages by given account id
+    public void getAllMessagesByAccountIdHandler(Context ctx) throws JsonProcessingException, SQLException{
+        ObjectMapper mapper=new ObjectMapper();
+        int accountId=Integer.parseInt(ctx.pathParam("account_id"));
+        List<Message> messageListRetreived=messageService.getAllMessageByAccountId(accountId);
+        if(messageListRetreived.size()>0){
+            ctx.json(mapper.writeValueAsString(messageListRetreived));
+            ctx.status(200);
+        }else{
+            ctx.json(mapper.writeValueAsString(messageListRetreived));
             ctx.status(200);
         }
     }

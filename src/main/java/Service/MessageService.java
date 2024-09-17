@@ -1,6 +1,7 @@
 package Service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import DAO.AccountDAO;
@@ -65,7 +66,7 @@ public class MessageService {
        
         return null;
     }
-
+    //delete message by message id
     public Message deleteMessageByMessageId(int message_id) throws SQLException{
         Message messageRetreivedForDeletion=messageDAO.getMessageById(message_id);
         if(messageRetreivedForDeletion!=null){
@@ -77,6 +78,17 @@ public class MessageService {
             }
         }
         return null;
+    }
+
+    //@Return message list from user given account id
+    public List<Message> getAllMessageByAccountId(int accountId) throws SQLException{
+        List<Message> emptyMessageList=new ArrayList<>();
+        List<Message> messageListRetrieved=messageDAO.getAllMessageByAccountId(accountId);
+        if(messageListRetrieved.size()>0){
+            return messageListRetrieved;
+        }else{
+            return emptyMessageList;
+        }
     }
     
 }
