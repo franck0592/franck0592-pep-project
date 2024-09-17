@@ -39,6 +39,7 @@ public class SocialMediaController {
         app.post("/login",this::userLoginHandler);
         app.get("/messages",this::retrievingAllMessagesHandler);
         app.post("/messages",this::creatingMessageHandler);
+        app.get("/messages/{message_id}",this::retrievingMessageByMessageIdHandler);
         
 
         return app;
@@ -94,6 +95,19 @@ public class SocialMediaController {
         }else{
             ctx.status(400);
         }
+    }
+    //Handler method to retreive message by given message id
+    public void retrievingMessageByMessageIdHandler(Context ctx) throws JsonProcessingException, SQLException{
+        ObjectMapper mapper=new ObjectMapper();
+        int messageId=Integer.parseInt(ctx.pathParam("message_id"));
+        Message messageRetrieved=messageService.getMessageById(messageId);
+        if(messageRetrieved!=null){
+            ctx.json(mapper.writeValueAsString(messageRetrieved));
+            ctx.status(200);
+        }else{
+            ctx.status(200);
+        }
+
     }
 
 

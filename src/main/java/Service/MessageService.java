@@ -38,9 +38,14 @@ public class MessageService {
         }
         return null;
     }
-    //@Return message by gien id
-    public Message getMessageById(int messageId){
-        return null;
+    //@Return message by given id
+    public Message getMessageById(int messageId) throws SQLException{
+        Message messageRetreived=messageDAO.getMessageById(messageId);
+        if(messageRetreived!=null){
+            return messageRetreived;
+        }else{
+            return null;
+        }
     }
     
 }
