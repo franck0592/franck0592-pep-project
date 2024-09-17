@@ -74,9 +74,10 @@ public class MessageDAO {
     }
     //return update message by given message id
     public Message updateMessage(Message messageToUpdate) throws SQLException{
-        String sqlStatement="UPDATE message SET message_text=?";
+        String sqlStatement="UPDATE message SET message_text=? WHERE message_id=?";
         PreparedStatement preparedStatement=connection.prepareStatement(sqlStatement);
         preparedStatement.setString(1, messageToUpdate.getMessage_text());
+        preparedStatement.setInt(2, messageToUpdate.getMessage_id());
         //processing the request
         int rowAffected=preparedStatement.executeUpdate();
         if(rowAffected>0){

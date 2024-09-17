@@ -47,5 +47,23 @@ public class MessageService {
             return null;
         }
     }
+
+    //@Return message update after checking some constraints
+    public Message updateMessageByMessageId(Message messageToUpdate) throws SQLException{
+        //checking whether the message exists 
+        Message messageRetrieved=messageDAO.getMessageById(messageToUpdate.getMessage_id());
+        if(messageRetrieved==null){
+            return null;
+        }
+        //checking blank and length not over 255*/
+        if(!messageToUpdate.getMessage_text().isBlank() && messageToUpdate.getMessage_text().length()<255){
+            Message messageUpdated=messageDAO.updateMessage(messageToUpdate);
+            if(messageUpdated!=null){
+                return messageUpdated;
+            }
+        }
+       
+        return null;
+    }
     
 }

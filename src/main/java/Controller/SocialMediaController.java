@@ -40,6 +40,7 @@ public class SocialMediaController {
         app.get("/messages",this::retrievingAllMessagesHandler);
         app.post("/messages",this::creatingMessageHandler);
         app.get("/messages/{message_id}",this::retrievingMessageByMessageIdHandler);
+        app.patch("/messages/{message_id}",this::updatingMessageByMessageIdHandler);
         
 
         return app;
@@ -108,6 +109,20 @@ public class SocialMediaController {
             ctx.status(200);
         }
 
+    }
+    //Handler method for returning message update
+    public void updatingMessageByMessageIdHandler(Context ctx) throws JsonProcessingException, SQLException{
+        ObjectMapper mapper=new ObjectMapper();
+        int messageId=Integer.parseInt(ctx.pathParam("message_id"));
+        Message messageToUpdate=mapper.readValue(ctx.body(), Message.class);
+        messageToUpdate.setMessage_id(messageId);
+        Message messageUpdated=messageService.updateMessageByMessageId(messageToUpdate);
+        if(messageUpdated!=null){
+            ctx.json(mapper.writeValueAsString(messageUpdated));
+            ctx.status(200);
+        }else{
+            ctx.status(400);
+        }
     }
 
 
