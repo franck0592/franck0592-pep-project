@@ -82,7 +82,7 @@ public class SocialMediaController {
             ctx.status(401);
         }
     }
-    //Handler method to retreive all messages into database
+    //Handler method to retreive all messages into database from endpoint:localhost:8080/messages
     public void retrievingAllMessagesHandler(Context ctx) throws JsonProcessingException, SQLException{
         ObjectMapper mapper=new ObjectMapper();
         List<Message> messageList=messageService.getAllMessages();
